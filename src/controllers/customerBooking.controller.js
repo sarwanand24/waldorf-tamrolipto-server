@@ -1,6 +1,52 @@
-import RoomBooking from "../models/room.model.js";
+import Booking from "../models/booking.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
+
+const transformBooking = (booking) => {
+  const obj = booking.toObject();
+
+  return {
+    id: obj._id.toString(),
+
+    propertyId:
+      obj.propertyId?.toString(),
+
+    roomId:
+      obj.roomId?.toString(),
+
+    guestName:
+      obj.customerName,
+
+    guestEmail:
+      obj.email,
+
+    guestPhone:
+      obj.phone,
+
+    checkIn:
+      obj.checkIn,
+
+    checkOut:
+      obj.checkOut,
+
+    guests:
+      obj.guests,
+
+    totalAmount:
+      obj.totalAmount,
+
+    specialRequests:
+      obj.specialRequests,
+
+    status:
+      obj.status === "checked_out"
+        ? "completed"
+        : obj.status,
+
+    createdAt:
+      obj.createdAt,
+  };
+};
 
 const submitRoomBooking = async (req, res, next) => {
     try {
@@ -35,7 +81,7 @@ const submitRoomBooking = async (req, res, next) => {
         }
 
         const booking =
-            await RoomBooking.create({
+            await Booking.create({
                 propertyId,
                 roomId,
 
@@ -57,7 +103,7 @@ const submitRoomBooking = async (req, res, next) => {
         return res.status(201).json(
             new ApiResponse(
                 201,
-                booking,
+                 transformBooking(booking),
                 "Booking submitted successfully"
             )
         );

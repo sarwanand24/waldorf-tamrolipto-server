@@ -2,6 +2,22 @@ import ContactMessage from "../models/contactMessage.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 
+const transformContact = (contact) => {
+    const obj = contact.toObject();
+
+    return {
+        id: obj._id.toString(),
+
+        name: obj.name,
+        email: obj.email,
+        message: obj.message,
+
+        isRead: obj.isRead,
+
+        createdAt: obj.createdAt
+    };
+};
+
 const submitContactForm = async (req, res, next) => {
     try {
 
@@ -38,7 +54,7 @@ const submitContactForm = async (req, res, next) => {
         return res.status(201).json(
             new ApiResponse(
                 201,
-                contact,
+                transformContact(contact),
                 "Message sent successfully"
             )
         );

@@ -16,8 +16,6 @@ export const getSettings = async (req, res, next) => {
     const notificationSettings =
       await Settings.findOne();
 
-      console.log('chack anu--', admin)
-
     return res.status(200).json(
       new ApiResponse(
         200,

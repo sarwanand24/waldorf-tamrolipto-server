@@ -2,7 +2,40 @@ import TableReservation from "../models/tableReservation.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 
-const submitTableReservation = async (req, res, next) => {
+const transformReservation = (reservation) => {
+    const obj = reservation.toJSON();
+
+    return {
+        id: obj.id,
+
+        propertyId: obj.propertyId.toString(),
+
+        guestName: obj.customerName,
+
+        guestEmail: obj.email,
+
+        guestPhone: obj.phone,
+
+        date: obj.date,
+
+        time: obj.time,
+
+        guests: obj.guests,
+
+        specialRequests:
+            obj.specialRequests || "",
+
+        status: obj.status,
+
+        createdAt: obj.createdAt
+    };
+};
+
+const submitTableReservation = async (
+    req,
+    res,
+    next
+) => {
     try {
 
         const {
@@ -36,7 +69,9 @@ const submitTableReservation = async (req, res, next) => {
                 propertyId,
 
                 customerName: guestName,
+
                 email: guestEmail,
+
                 phone: guestPhone,
 
                 date,
@@ -51,7 +86,9 @@ const submitTableReservation = async (req, res, next) => {
         return res.status(201).json(
             new ApiResponse(
                 201,
-                reservation,
+                transformReservation(
+                    reservation
+                ),
                 "Reservation submitted successfully"
             )
         );

@@ -2,6 +2,23 @@ import Room from "../models/room.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
+const transformRoom = (room) => {
+  const obj = room.toObject();
+
+  return {
+    ...obj,
+
+    id: obj._id.toString(),
+
+    propertyId: obj.propertyId?.toString(),
+
+    images:
+      obj.images?.map(
+        (img) => img.url
+      ) || [],
+  };
+};
+
 const getRooms = async (req, res, next) => {
     try {
 
@@ -20,7 +37,7 @@ const getRooms = async (req, res, next) => {
         return res.status(200).json(
             new ApiResponse(
                 200,
-                rooms,
+                rooms.map(transformRoom),
                 "Rooms fetched successfully"
             )
         );
@@ -47,7 +64,7 @@ const getRoomBySlug = async (req, res, next) => {
         return res.status(200).json(
             new ApiResponse(
                 200,
-                room,
+                transformRoom(room),
                 "Room fetched successfully"
             )
         );
