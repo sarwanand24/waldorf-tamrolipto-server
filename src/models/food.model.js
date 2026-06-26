@@ -16,7 +16,6 @@ const foodSchema = new mongoose.Schema(
 
     description: {
         type: String,
-        required: true
     },
 
     price: {
@@ -31,14 +30,14 @@ const foodSchema = new mongoose.Schema(
     category: {
         type: String,
         enum: [
-            "appetizers",
             "soups",
-            "salads",
+            "starters",
+            "chinese",
             "mains",
-            "desserts",
-            "beverages",
+            "rice",
+            "breads",
             "breakfast",
-            "sides"
+            "desserts"
         ],
         required: true
     },

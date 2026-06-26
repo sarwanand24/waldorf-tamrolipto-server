@@ -105,43 +105,30 @@ async (req, res) => {
     );
 });
 
-export const createBarItem = asyncHandler(
-async (req,res)=>{
+export const createBarItem = asyncHandler(async (req, res) => {
+    const property = await Property.findById(req.body.propertyId);
 
-    const property =
-    await Property.findById(
-        req.body.propertyId
-    );
-
-    if(!property){
-        throw new ApiError(
-            404,
-            "Property not found"
-        );
+    if (!property) {
+        throw new ApiError(404, "Property not found");
     }
 
-    if(!req.file){
-        throw new ApiError(
-            400,
-            "Bar item image required"
+    let image = {};
+
+    if (req.file) {
+        const uploadedImage = await uploadSingleImage(
+            req.file.path,
+            "bar-items"
         );
-    }
 
-    const uploadedImage =
-    await uploadSingleImage(
-        req.file.path,
-        "bar-items"
-    );
-
-    const item =
-    await BarItem.create({
-        ...req.body,
-
-        image: {
+        image = {
             url: uploadedImage.url,
-            publicId:
-            uploadedImage.public_id
-        }
+            publicId: uploadedImage.public_id,
+        };
+    }
+
+    const item = await BarItem.create({
+        ...req.body,
+        ...(req.file && { image }),
     });
 
     return res.status(201).json(

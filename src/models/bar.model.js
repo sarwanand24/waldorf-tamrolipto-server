@@ -16,7 +16,6 @@ const barItemSchema = new mongoose.Schema(
 
     description: {
         type: String,
-        required: true
     },
 
     price: {
@@ -32,11 +31,12 @@ const barItemSchema = new mongoose.Schema(
     category: {
         type: String,
         enum: [
-            "cocktails",
-            "wines",
-            "spirits",
-            "beers",
-            "non_alcoholic"
+            "scotch",
+            "whiskey",
+            "rum",
+            "vodka",
+            "beer",
+            "refreshment"
         ],
         required: true
     },

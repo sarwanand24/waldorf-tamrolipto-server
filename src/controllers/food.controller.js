@@ -118,43 +118,34 @@ try{
 }
 };
 
-export const createFoodItem = asyncHandler(
-async (req,res)=>{
+export const createFoodItem = asyncHandler(async (req, res) => {
 
-    const property =
-    await Property.findById(
-        req.body.propertyId
-    );
+    const property = await Property.findById(req.body.propertyId);
 
-    if(!property){
+    if (!property) {
         throw new ApiError(
             404,
             "Property not found"
         );
     }
 
-    if(!req.file){
-        throw new ApiError(
-            400,
-            "Food image required"
+    let image = {};
+
+    if (req.file) {
+        const uploadedImage = await uploadSingleImage(
+            req.file.path,
+            "foods"
         );
+
+        image = {
+            url: uploadedImage.url,
+            publicId: uploadedImage.public_id
+        };
     }
 
-    const uploadedImage =
-    await uploadSingleImage(
-        req.file.path,
-        "foods"
-    );
-
-    const food =
-    await Food.create({
+    const food = await Food.create({
         ...req.body,
-
-        image: {
-            url: uploadedImage.url,
-            publicId:
-            uploadedImage.public_id
-        }
+        ...(req.file && { image })
     });
 
     return res.status(201).json(

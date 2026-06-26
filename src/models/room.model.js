@@ -22,12 +22,10 @@ const roomSchema = new mongoose.Schema(
 
     description: {
         type: String,
-        required: true
     },
 
     shortDescription: {
         type: String,
-        required: true
     },
 
     images: [
@@ -63,8 +61,7 @@ const roomSchema = new mongoose.Schema(
             "standard",
             "deluxe",
             "suite",
-            "penthouse",
-            "presidential"
+            "executive"
         ],
         required: true
     },
